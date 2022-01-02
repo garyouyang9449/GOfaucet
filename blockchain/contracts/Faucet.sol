@@ -3,12 +3,16 @@ pragma solidity ^0.8.3;
 
 contract Faucet {
 	address private owner;
-	uint private transferAmount = 0.05 ether;
+	uint private transferAmount = 1000000000000000000;
 
 	mapping(address => uint256) readyTime;
 
 	constructor() payable {
 		owner = msg.sender;
+	}
+
+	function getOwner() public view returns(address) {
+		return owner;
 	}
 
 	function setOwner(address _owner) public {
