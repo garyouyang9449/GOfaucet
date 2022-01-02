@@ -20,6 +20,10 @@ contract Faucet {
 		owner = _owner;
 	}
 
+	function getAmount() public view returns(uint) {
+		return transferAmount;
+	}
+
 	function setAmount(uint _transferAmount) public {
 		require(msg.sender == owner);
 		transferAmount = _transferAmount;
