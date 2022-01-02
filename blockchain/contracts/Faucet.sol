@@ -21,7 +21,7 @@ contract Faucet {
 		transferAmount = _transferAmount;
 	}
 
-	function donate(uint amount) public payable {
+	function donate(uint _amount) public payable {
 		(bool success, bytes memory returnData) = owner.call{value: _amount}("");
 		require(success, "Transfer failed.");
 	}
