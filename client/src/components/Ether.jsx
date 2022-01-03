@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
 import { Box, Button, Grid, TextField, Typography } from '@mui/material';
 
-const Ether = () => {
+const Ether = ({ account, contract }) => {
   const [address, setAddress] = useState('');
 
   const onChange = (event) => {
     setAddress(event.target.value);
   }
 
-  const onClick = () => {
-    
+  const onClick = async () => {
+    const before = await contract.methods.getAmount().call();
+
+    await contract.methods.setAmount('5000000000000000000').call();
+
+    const after = await contract.methods.getAmount().call();
+
+    console.log(before, after)
   }
 
   return (
@@ -39,7 +45,7 @@ const Ether = () => {
         </Box>
       </Grid>
       <Grid item xs={12}>
-        <Button variant="contained">Send me test Ether</Button>
+        <Button variant="contained" onClick={onClick}>Send me test Ether</Button>
       </Grid>
     </Grid>
   )
