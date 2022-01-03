@@ -8,7 +8,7 @@ const Header = () => {
     <AppBar position="static" style={{ background: '#2E3B55' }}>
       <Toolbar>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          GoFaucet
+          GoFaucΞt
         </Typography>
       </Toolbar>
     </AppBar>
