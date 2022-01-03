@@ -34,11 +34,11 @@ contract Faucet {
 		require(success, "Transfer failed.");
 	}
 
-	function sendTokens(address _recipient) public payable {
+	function sendTokens() public payable {
 		require(block.timestamp > readyTime[msg.sender], "You are too greedy!");
 		require(address(this).balance >= transferAmount, "Not enough ether in the faucet, please donate UWU");
 
-		(bool success, bytes memory returnData) = _recipient.call{value: transferAmount}("");
+		(bool success, bytes memory returnData) = msg.sender.call{value: transferAmount}("");
 		require(success, "Transfer failed.");
 
 		readyTime[msg.sender] += 1 days;
