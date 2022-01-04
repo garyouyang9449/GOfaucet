@@ -3,9 +3,12 @@ pragma solidity ^0.8.3;
 
 contract Faucet {
 	address private owner;
-	uint private transferAmount = 1000000000000000000;
+	uint private transferAmount = 0.001 ether;
 
-	mapping(address => uint256) readyTime;
+	mapping(address => uint256) private readyTime;
+
+	event Donate(address indexed from, uint amount);
+	event Withdrawal(address indexed to);
 
 	constructor() payable {
 		owner = msg.sender;
@@ -15,13 +18,17 @@ contract Faucet {
 		return owner;
 	}
 
+	function getAmount() public view returns(uint) {
+		return transferAmount;
+	}
+
+	function getReadTime(address user) public view returns(uint256) {
+		return readyTime[user];
+	}
+
 	function setOwner(address _owner) public {
 		require(msg.sender == owner);
 		owner = _owner;
-	}
-
-	function getAmount() public view returns(uint) {
-		return transferAmount;
 	}
 
 	function setAmount(uint _transferAmount) public {
@@ -29,10 +36,9 @@ contract Faucet {
 		transferAmount = _transferAmount;
 	}
 
-	function donate(uint _amount) public payable {
-		(bool success, bytes memory returnData) = owner.call{value: _amount}("");
-		require(success, "Transfer failed.");
-	}
+	receive() external payable {
+			emit Donate(msg.sender, msg.value); 
+	} 
 
 	function sendTokens() public payable {
 		require(block.timestamp > readyTime[msg.sender], "You are too greedy!");
@@ -41,6 +47,7 @@ contract Faucet {
 		(bool success, bytes memory returnData) = msg.sender.call{value: transferAmount}("");
 		require(success, "Transfer failed.");
 
-		readyTime[msg.sender] += 1 days;
+		readyTime[msg.sender] = readyTime[msg.sender] + 1 days;
+		emit Withdrawal(msg.sender);
 	}
 }
